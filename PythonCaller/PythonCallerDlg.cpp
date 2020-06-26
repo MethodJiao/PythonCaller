@@ -128,6 +128,7 @@ void CPythonCallerDlg::OnSysCommand(UINT nID, LPARAM lParam)
 
 void CPythonCallerDlg::OnPaint()
 {
+
 	if (IsIconic())
 	{
 		CPaintDC dc(this); // 用于绘制的设备上下文
