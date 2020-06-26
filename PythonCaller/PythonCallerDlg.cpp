@@ -180,6 +180,7 @@ void CPythonCallerDlg::OnBnClickedOk()
 	int b = 0;
 
 
+
 	//PyObject * poMainModule = PyImport_AddModule("__main__");
 
 	//PyObject * poAttrList = PyObject_Dir(poMainModule);
