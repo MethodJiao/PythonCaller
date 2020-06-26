@@ -64,6 +64,7 @@ BEGIN_MESSAGE_MAP(CPythonCallerDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDOK, &CPythonCallerDlg::OnBnClickedOk)
+	ON_WM_CLOSE()
 END_MESSAGE_MAP()
 
 
@@ -74,6 +75,11 @@ BOOL CPythonCallerDlg::OnInitDialog()
 	CDialogEx::OnInitDialog();
 
 	// 将“关于...”菜单项添加到系统菜单中。
+	Py_Initialize();//加载Python解释器
+	PyRun_SimpleString("import sys");
+	PyRun_SimpleString("sys.path.append('Dlls/')");
+
+
 
 	// IDM_ABOUTBOX 必须在系统命令范围内。
 	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
@@ -157,10 +163,6 @@ HCURSOR CPythonCallerDlg::OnQueryDragIcon()
 void CPythonCallerDlg::OnBnClickedOk()
 {
 	// TODO:  在此添加控件通知处理程序代码
-	Py_Initialize();//加载Python解释器
-	using namespace std;
-	PyRun_SimpleString("import sys");
-	PyRun_SimpleString("sys.path.append('Dlls/')");
 
 	PyObject * pModule = NULL;
 	PyObject * pFunc = NULL;
@@ -177,41 +179,15 @@ void CPythonCallerDlg::OnBnClickedOk()
 	pResult = PyObject_CallObject(pFunc, pArgs);
 	//返回值为C++
 	double a = PyLong_AsDouble(pResult);
-	int b = 0;
+	return;
+
+}
 
 
+void CPythonCallerDlg::OnClose()
+{
+	// TODO:  在此添加消息处理程序代码和/或调用默认值
 
-	//PyObject * poMainModule = PyImport_AddModule("__main__");
-
-	//PyObject * poAttrList = PyObject_Dir(poMainModule);
-
-	//PyObject * poAttrIter = PyObject_GetIter(poAttrList);
-
-	//PyObject * poAttrName;
-
-	//while ((poAttrName = PyIter_Next(poAttrIter)) != NULL)
-	//{
-	//	std::string oAttrName = PyUnicode_AS_DATA(poAttrName);
-
-	//	// Make sure we don't delete any private objects.
-	//	//if (!StartsWith(oAttrName, "__") || !EndsWith(oAttrName, "__"))
-	//	//{
-	//		PyObject * poAttr = PyObject_GetAttr(poMainModule, poAttrName);
-
-	//		// Make sure we don't delete any module objects.
-	//		if (poAttr && poAttr->ob_type != poMainModule->ob_type)
-	//			PyObject_SetAttr(poMainModule, poAttrName, NULL);
-
-	//		Py_DecRef(poAttr);
-	//	//}
-
-	//	Py_DecRef(poAttrName);
-	//}
-
-	//Py_DecRef(poAttrIter);
-
-	//Py_DecRef(poAttrList);
-
-	//Py_FinalizeEx();//卸载Python解释器
-
+	Py_Finalize();//卸载Python解释器
+	CDialogEx::OnClose();
 }
